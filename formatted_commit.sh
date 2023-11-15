@@ -1,10 +1,27 @@
 #!/bin/bash
 
+# Check if fzf is installed
+if ! command -v fzf &> /dev/null; then
+    echo "Error: fzf is not installed. Please install it first."
+    exit 1
+fi
+
 # Get the current branch name
 branch_name=$(git rev-parse --abbrev-ref HEAD 2>/dev/null)
 
-if [ $? -eq 0 ]; then
-    echo "Current branch: $branch_name"
+# Commit category
+options=("feat" "fix" "docs" "test" "refactor" "build" "perf" "format")
+
+# Use fzf to interactively select a single option
+selected_option=$(printf "%s\n" "${options[@]}" | fzf --height=10)
+
+# Prompt the user for a commit message
+read -p "Enter your commit message: " commit_message
+
+
+# Check if the commit message is not empty
+if [ -n "$commit_message" ]; then
+    git commit -m "$branch_name: $selected_option - $commit_message"
 else
-    echo "Not a git repository or an error occurred."
+    echo "Commit message is empty. No commit made."
 fi
