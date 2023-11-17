@@ -21,7 +21,7 @@ read -p "Enter your commit message: " commit_message
 
 # Check if the commit message is not empty
 if [ -n "$commit_message" ]; then
-    git commit -m "$branch_name: $selected_option - $commit_message"
+    git commit -n -m "$branch_name: $selected_option - $commit_message"
 else
     echo "Commit message is empty. No commit made."
 fi
